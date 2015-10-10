@@ -161,4 +161,12 @@ void loop() {
      left();
      find_diff();
    }
+  else if(diff[3]<(high[3]+low[2])/2)
+   while(!(diff[3]<(high[3]+low[2])/2))
+   {
+     right();
+     find_diff();
+   }
+  else
+   fwd();
 }
