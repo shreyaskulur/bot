@@ -16,9 +16,10 @@ int low[6];  //config low diff readings
 int on[6];  //present on readings
 int off[6];  //present off readings
 int diff[6]; //present diff
-
+int thresh[6];
 int lcount = 0;
 int rcount = 0;
+
 void left ( int turn_speed = 255)
 {
   analogWrite(left_speed , turn_speed);
@@ -125,7 +126,8 @@ void find_diff()
   Serial.print("\n");  
 }
 
-void bot_setup()
+
+void bot_init()
 {
   find_diff();
   high[0] = analogRead(diff[0]);
@@ -134,7 +136,7 @@ void bot_setup()
   high[4] = analogRead(diff[4]);
   high[2] = (high[0] + high[1] + high[3] + high[4])/4;
   low[2] = diff[2];
-  /*left();
+  left();
   delay(300);
   stp();
   delay(100);
@@ -144,25 +146,37 @@ void bot_setup()
   delay(100);
   left();
   delay(300);
-  stp();*/
+  stp();
+}
+
+
+void threshold()
+{
+  for(int i=0; i<=5; i++)
+    thresh[i] = (high[i] + low[i])/2;
 }
 
 void setup() {
-  motor_init();
-  bot_setup();
-  
+  motor_init();  
+  bot_init();
+  threshold();
 }
 
 void loop() {
   find_diff();
-  if(diff[1]<(high[1]+low[2])/2)
-   while(!(diff[1]<(high[1]+low[2])/2))
+  if(diff[1] < thresh[1] && diff[2] < thresh[2] && diff[3] < thresh[3] && diff[4] < thresh[4] && diff[5] < thresh[5])
+    if(lcount > rcount)
+          
+    else if(rcount > lcount)
+  
+  else if(diff[1] < thresh[i])
+   while(diff[1] < thresh[i])
    {
      left();
      find_diff();
    }
-  else if(diff[3]<(high[3]+low[2])/2)
-   while(!(diff[3]<(high[3]+low[2])/2))
+  else if(diff[3] < thresh[i])
+   while(diff[3] < thresh[i])
    {
      right();
      find_diff();
